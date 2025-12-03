@@ -16,7 +16,7 @@ Nous allons développer la solution en Python.
 - Merci de respecter ces étapes pour le bon déroulement du projet.
 
 **3) Pour cloner le projet votre projet sur VSCode :**
-- git clone ... ==> puis ouvrir le dossier du projet dans votre IDE
+- git clone https://github.com/Enzo1401/MSPR_6.1.git ==> puis ouvrir le dossier du projet dans votre IDE
 
 **4) Commandes utiles (CMD VSCODE):**
 - git branch ==> voir les branches disponibles 
