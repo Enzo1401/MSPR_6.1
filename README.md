@@ -16,12 +16,12 @@ Nous allons développer la solution en Python.
 - Merci de respecter ces étapes pour le bon déroulement du projet.
 
 **Pour cloner le projet votre projet sur VSCode :**
-git clone ... ==> puis ouvrir le dossier du projet dans votre IDE
+- git clone ... ==> puis ouvrir le dossier du projet dans votre IDE
 
 **Commandes utiles (CMD VSCODE):**
-git branch ==> voir les branches disponibles 
-git checkout nom_branche ==> pour changer de branche
-git status ==> voir le status des fichiers
-git add fichier.py ==> ajouter un fichier 
-git commit -m "Description rapide du commit" ==> faire le commit sur la branche
-git push -u origin dev ==> pousser le code sur la branche 
+- git branch ==> voir les branches disponibles 
+- git checkout nom_branche ==> pour changer de branche
+- git status ==> voir le status des fichiers
+- git add fichier.py ==> ajouter un fichier 
+- git commit -m "Description rapide du commit" ==> faire le commit sur la branche
+- git push -u origin dev ==> pousser le code sur la branche 
