@@ -1,7 +1,5 @@
 # MSPR_6.1
 
-# MSPR_6.1
-
 **1) CONTEXTE** :
 
 La Direction IT mandate votre équipe pour concevoir, développer et documenter NTL-SysToolbox, un
