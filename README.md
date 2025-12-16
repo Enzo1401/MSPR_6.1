@@ -26,4 +26,10 @@ Nous allons développer la solution en Python.
 - git status ==> voir le status des fichiers
 - git add fichier.py ==> ajouter un fichier 
 - git commit -m "Description rapide du commit" ==> faire le commit sur la branche
-- git push -u origin dev ==> pousser le code sur la branche 
+- git push -u origin dev ==> pousser le code sur la branche
+
+
+Avant de pourvoir développer, il faudra exécuter ces commandes après avoir récuperer le repot :
+
+.\venv\Scripts\python.exe -m pip install -r requirements.txt
+.\venv\Scripts\python.exe main.py
