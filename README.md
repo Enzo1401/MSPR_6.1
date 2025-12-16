@@ -31,5 +31,6 @@ Nous allons développer la solution en Python.
 
 Avant de pourvoir développer, il faudra exécuter ces commandes après avoir récuperer le repot :
 
-.\venv\Scripts\python.exe -m pip install -r requirements.txt
-.\venv\Scripts\python.exe main.py
+python -m venv venv : création de l'environnement virtuel
+.\venv\Scripts\python.exe -m pip install -r requirements.txt : installation des dependances
+.\venv\Scripts\python.exe main.py : exécuter l'outil
