@@ -1,0 +1,26 @@
+# Interface et CLI
+click
+prompt_toolkit 
+# Pour un menu CLI réellement interactif et plus agréable que les inputs de base.
+
+# Module Diagnostic (Windows/Linux)
+# - Stats OS locales (CPU/RAM/Disques/Uptime)
+psutil 
+# - Connexion aux serveurs Windows (DC01/DC02/SUPER-01) pour AD/DNS/Stats distantes
+#   L'utilisation de ldap3 est une bonne pratique pour l'état AD/DNS.
+ldap3
+# - Connexion aux serveurs Linux (WMS-DB/WMS-APP) pour les stats et MySQL
+paramiko 
+# Pour l'exécution de commandes via SSH (uptime, stats, etc.) sur Ubuntu 20.04[cite: 162].
+mysql-connector-python 
+# Pour tester la connexion à la base MySQL du WMS[cite: 96, 62].
+
+# Module Audit d'Obsolescence
+requests 
+# Pour interroger des sources de données en ligne (ex: endoflife.date) pour l'EOL[cite: 105].
+
+# Gestion des sorties et de la configuration
+pydantic 
+# Pour la validation des données et la création de modèles de sortie (JSON)[cite: 91].
+python-dotenv 
+# Pour la gestion simplifiée des variables d'environnement (surcharger la configuration)[cite: 115].
