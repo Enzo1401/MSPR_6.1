@@ -51,8 +51,9 @@ Avant de pouvoir développer, il faudra exécuter ces commandes après avoir ré
 
 `python -m venv venv` : création de l'environnement virtuel
 
-`.\venv\Scripts\python.exe -m pip install -r requirements.txt` : installation des dépendances ( à faire quand on ajoute une nouvelle dépendance au projet)
-
 `\venv\Scripts\activate` : à faire avant d'exécuterle code pour activer l'environnement virtuel
 
-`.\venv\Scripts\python.exe main.py` : exécuter l'outil
+`pip install -r requirements.txt` : installation des dépendances ( à faire quand on ajoute une nouvelle dépendance au projet)
+
+`python main.py` : exécuter l'outil
+
