@@ -13,7 +13,7 @@ La solution doit superviser le serveur Windows qui s'occupe du DHCP/DNS et le se
 
 Nous allons développer la solution en Python. 
 
-**2) Struture du développement :**
+**2) Structure du développement :**
 - On développe la solution sur la branche **dev** puis on réalise une pull request sur GitHub (Explication des fonctionnalités ajoutées). Une fois approuvé, on fera des test sur la branche **test**. Enfin, une fois validé par l'ensemble de l'équipe, on pourra merger la pull request sur la branche principale.
 - Merci de respecter ces étapes pour le bon déroulement du projet.
 
@@ -28,11 +28,13 @@ Nous allons développer la solution en Python.
 - git commit -m "Description rapide du commit" ==> faire le commit sur la branche
 - git push -u origin dev ==> pousser le code sur la branche
 
+---
 
-Avant de pourvoir développer, il faudra exécuter ces commandes après avoir récuperer le repot :
+### ⚠️ PRÉREQUIS À INSTALLER (AVANT DÉVELOPPEMENT)
 
-python -m venv venv : création de l'environnement virtuel
+Pour que le module de sauvegarde fonctionne, vous devez installer les outils suivants sur votre machine locale :
 
-.\venv\Scripts\python.exe -m pip install -r requirements.txt : installation des dependances
-
-.\venv\Scripts\python.exe main.py : exécuter l'outil
+1. **MySQL Client (mysqldump)** :
+   - Téléchargez et installez [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) ou MySQL Community Server.
+   - **Important** : Ajoutez le chemin du dossier `bin` (ex: `C:\Program Files\MySQL\MySQL Workbench 8.0\`) à votre variable d'environnement **PATH** de Windows.
+   - Vérification : Tapez `mysqldump --version` dans un terminal.
