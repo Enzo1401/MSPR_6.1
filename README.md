@@ -32,9 +32,25 @@ Nous allons développer la solution en Python.
 
 ### ⚠️ PRÉREQUIS À INSTALLER (AVANT DÉVELOPPEMENT)
 
-Pour que le module de sauvegarde fonctionne, vous devez installer les outils suivants sur votre machine locale :
+Pour que le module de sauvegarde fonctionne (SQL et CSV), vous devez installer et configurer les outils suivants sur votre machine locale :
 
-1. **MySQL Client (mysqldump)** :
-   - Téléchargez et installez [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) ou  [MySQL Community Server](https://dev.mysql.com/downloads/installer/).
+1. **Outils Système MySQL (mysqldump)** :
+   - Téléchargez et installez [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) ou [MySQL Community Server](https://dev.mysql.com/downloads/installer/).
    - **Important** : Ajoutez le chemin du dossier `bin` (ex: `C:\Program Files\MySQL\MySQL Workbench 8.0\`) à votre variable d'environnement **PATH** de Windows.
-   - Vérification : Tapez `mysqldump --version` dans un terminal.
+   - **Vérification** : Tapez `mysqldump --version` dans un terminal. Si la commande n'est pas reconnue, le module de sauvegarde SQL ne fonctionnera pas.
+
+2. **Connecteur Python MySQL** :
+   - Pour l'exportation des tables en CSV, l'outil utilise la bibliothèque [mysql-connector-python](https://pypi.org/project/mysql-connector-python/).
+   - **Installation** : Ce module est listé dans le fichier `requirements.txt`. Il s'installera automatiquement lors de l'étape d'initialisation de l'environnement virtuel.
+
+---
+
+**5) Initialisation du projet :**
+
+Avant de pouvoir développer, il faudra exécuter ces commandes après avoir récupéré le repo :
+
+`python -m venv venv` : création de l'environnement virtuel
+
+`.\venv\Scripts\python.exe -m pip install -r requirements.txt` : installation des dépendances
+
+`.\venv\Scripts\python.exe main.py` : exécuter l'outil
