@@ -35,6 +35,6 @@ Nous allons développer la solution en Python.
 Pour que le module de sauvegarde fonctionne, vous devez installer les outils suivants sur votre machine locale :
 
 1. **MySQL Client (mysqldump)** :
-   - Téléchargez et installez [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) ou MySQL Community Server.
+   - Téléchargez et installez [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) ou  [MySQL Community Server](https://dev.mysql.com/downloads/installer/).
    - **Important** : Ajoutez le chemin du dossier `bin` (ex: `C:\Program Files\MySQL\MySQL Workbench 8.0\`) à votre variable d'environnement **PATH** de Windows.
    - Vérification : Tapez `mysqldump --version` dans un terminal.
