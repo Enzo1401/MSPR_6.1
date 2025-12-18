@@ -45,15 +45,30 @@ Pour que le module de sauvegarde fonctionne (SQL et CSV), vous devez installer e
 
 ---
 
-**5) Initialisation du projet :**
+---
 
-Avant de pouvoir développer, il faudra exécuter ces commandes après avoir récupéré le repo :
+**5) Initialisation et Lancement :**
 
-`python -m venv venv` : création de l'environnement virtuel
+Il existe deux façons de lancer l'outil après avoir récupéré le repo :
 
-`\venv\Scripts\activate` : à faire avant d'exécuterle code pour activer l'environnement virtuel
+### **A. Méthode Automatique (Recommandée)**
+Double-cliquez simplement sur le fichier à la racine du projet :
+> `lancer_toolbox.bat`
 
-`pip install -r requirements.txt` : installation des dépendances ( à faire quand on ajoute une nouvelle dépendance au projet)
+Ce script s'occupe de **tout** : il crée l'environnement virtuel s'il est absent, installe ou met à jour les dépendances automatiquement, puis lance l'outil. C'est la méthode la plus rapide.
 
-`python main.py` : exécuter l'outil
+### **B. Méthode Manuelle (Pour le développement)**
+Si vous préférez gérer votre environnement manuellement dans le terminal :
+
+1. **Création de l'environnement virtuel** (à faire une seule fois) :
+   `python -m venv venv`
+
+2. **Activation de l'environnement virtuel** (à faire à chaque nouveau terminal avant d'exécuter le code) :
+   `.\venv\Scripts\activate`
+
+3. **Installation des dépendances** (à faire à la première installation ou si le fichier `requirements.txt` est modifié) :
+   `pip install -r requirements.txt`
+
+4. **Exécution de l'outil** :
+   `python main.py`
 
