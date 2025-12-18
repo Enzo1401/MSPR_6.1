@@ -13,7 +13,7 @@ La solution doit superviser le serveur Windows qui s'occupe du DHCP/DNS et le se
 
 Nous allons développer la solution en Python. 
 
-**2) Struture du développement :**
+**2) Structure du développement :**
 - On développe la solution sur la branche **dev** puis on réalise une pull request sur GitHub (Explication des fonctionnalités ajoutées). Une fois approuvé, on fera des test sur la branche **test**. Enfin, une fois validé par l'ensemble de l'équipe, on pourra merger la pull request sur la branche principale.
 - Merci de respecter ces étapes pour le bon déroulement du projet.
 
@@ -28,11 +28,47 @@ Nous allons développer la solution en Python.
 - git commit -m "Description rapide du commit" ==> faire le commit sur la branche
 - git push -u origin dev ==> pousser le code sur la branche
 
+---
 
-Avant de pourvoir développer, il faudra exécuter ces commandes après avoir récuperer le repot :
+### ⚠️ PRÉREQUIS À INSTALLER (AVANT DÉVELOPPEMENT)
 
-python -m venv venv : création de l'environnement virtuel
+Pour que le module de sauvegarde fonctionne (SQL et CSV), vous devez installer et configurer les outils suivants sur votre machine locale :
 
-.\venv\Scripts\python.exe -m pip install -r requirements.txt : installation des dependances
+1. **Outils Système MySQL (mysqldump)** :
+   - Téléchargez et installez [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) ou [MySQL Community Server](https://dev.mysql.com/downloads/installer/).
+   - **Important** : Ajoutez le chemin du dossier `bin` (ex: `C:\Program Files\MySQL\MySQL Workbench 8.0\`) à votre variable d'environnement **PATH** de Windows.
+   - **Vérification** : Tapez `mysqldump --version` dans un terminal. Si la commande n'est pas reconnue, le module de sauvegarde SQL ne fonctionnera pas.
 
-.\venv\Scripts\python.exe main.py : exécuter l'outil
+2. **Connecteur Python MySQL** :
+   - Pour l'exportation des tables en CSV, l'outil utilise la bibliothèque [mysql-connector-python](https://pypi.org/project/mysql-connector-python/).
+   - **Installation** : Ce module est listé dans le fichier `requirements.txt`. Il s'installera automatiquement lors de l'étape d'initialisation de l'environnement virtuel.
+
+---
+
+---
+
+**5) Initialisation et Lancement :**
+
+Il existe deux façons de lancer l'outil après avoir récupéré le repo :
+
+### **A. Méthode Automatique (Recommandée)**
+Double-cliquez simplement sur le fichier à la racine du projet :
+> `lancer_toolbox.bat`
+
+Ce script s'occupe de **tout** : il crée l'environnement virtuel s'il est absent, installe ou met à jour les dépendances automatiquement, puis lance l'outil. C'est la méthode la plus rapide.
+
+### **B. Méthode Manuelle (Pour le développement)**
+Si vous préférez gérer votre environnement manuellement dans le terminal :
+
+1. **Création de l'environnement virtuel** (à faire une seule fois) :
+   `python -m venv venv`
+
+2. **Activation de l'environnement virtuel** (à faire à chaque nouveau terminal avant d'exécuter le code) :
+   `.\venv\Scripts\activate`
+
+3. **Installation des dépendances** (à faire à la première installation ou si le fichier `requirements.txt` est modifié) :
+   `pip install -r requirements.txt`
+
+4. **Exécution de l'outil** :
+   `python main.py`
+
