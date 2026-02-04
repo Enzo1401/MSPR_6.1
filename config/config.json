@@ -1,5 +1,14 @@
 {
-    "WMS_DB_IP": "10.60.177.149",
+    "WMS_DB_IP": "10.60.178.49",
     "WMS_DB_NAME": "wms_db",
-    "WMS_DB_USER": "ntl_admin"
+    "WMS_DB_USER": "ntl_admin",
+    "WMS_DB_PASS": "password",
+
+    "WMS_IP_DC": "10.60.178.48",
+    "WIN_USER": "Administrateur",
+    "WIN_PASS": "Administrateur12345!",
+
+    "WMS_METIER_IP": "192.168.0.20",
+    "SSH_USER": "admin_ssh",
+    "SSH_PASS": "Administrateur12345!"
 }
