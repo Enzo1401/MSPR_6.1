@@ -152,39 +152,60 @@ def gerer_sauvegarde_wms(config):
 
 def gerer_audit_obsolescence(config):
     global echecs_auth
-    
-    # Récupération du MDP via session
-    pwd = get_session_password("pwd_win", "Audit d'obsolescence (WMI)")
-    ip_ad = config.get("WMS_IP_DC")
-    user = config.get("WIN_USER")
+    while True:
+        print(f"\n{Fore.GREEN}--- MODULE AUDIT & OBSOLESCENCE ---")
+        print("1. Audit Cible Unique (WMI)")
+        print("2. Scan Plage Réseau (Inventaire)")
+        print("3. Audit de masse via fichier CSV")
+        print("4. Consulter toutes les versions d'un OS")
+        print("5. Retour")
+        choix = input(f"\n{Fore.YELLOW}Votre choix : ")
 
-    print(f"\n{Fore.CYAN}--- Module d'Audit NTL ---{Style.RESET_ALL}")
-    print(f"Cible : {Fore.YELLOW}{ip_ad}")
+        try:
+            if choix == '1':
+                pwd = get_session_password("pwd_win", "Audit WMI")
+                ip, user = config.get("WMS_IP_DC"), config.get("WIN_USER")
+                if audit.scanner_ip(ip):
+                    # Pas de timeout passé ici, l'erreur disparaitra
+                    host, prod, ver = audit.recuperer_infos_os_auto(ip, user, pwd)
+                    if host:
+                        print(f"🖥️  Serveur : {host}")
+                        eol = audit.verifier_eol_api(prod, ver)
+                        print(audit.formater_resultat_eol(prod, ver, eol))
+                        echecs_auth = 0
+                    else: raise Exception("rejected")
+                else: print(f"{Fore.RED}❌ Injoignable.")
 
-    try:
-        if audit.scanner_ip(ip_ad):
-            print(f"\n{Fore.BLUE}🔍 Scan en cours...{Style.RESET_ALL}")
-            hostname, produit, version = audit.recuperer_infos_os_auto(ip_ad, user, pwd)
-            
-            if hostname:
-                print(f"🖥️  Nom du Serveur : {Fore.WHITE}{Style.BRIGHT}{hostname}{Style.RESET_ALL}")
-                date_eol = audit.verifier_eol_api(produit, version)
-                print(audit.formater_resultat_eol(produit, version, date_eol))
-                echecs_auth = 0
-            else:
-                raise Exception("rejected")
-        else:
-            print(f"{Fore.RED}❌ La machine {ip_ad} ne répond pas au ping.{Style.RESET_ALL}")
-            
-    except Exception as e:
-        if "rejected" in str(e).lower() or "authentication" in str(e).lower():
-            echecs_auth += 1
-            reset_session()
-            print(f"\n{Fore.RED}❌ ÉCHEC Audit : Accès refusé ({echecs_auth}/3)")
-        else:
-            print(f"\n{Fore.RED}⚠️ ERREUR : {e}")
-    
-    input(f"\n{Fore.WHITE}Appuyez sur Entrée pour continuer...")
+            elif choix == '2':
+                base = input("Base IP (ex: 10.60.176) : ")
+                debut, fin = int(input("Début : ")), int(input("Fin : "))
+                pwd = get_session_password("pwd_win", "Inventaire Réseau")
+                user = config.get("WIN_USER")
+                actives = audit.scanner_plage_reseau(base, debut, fin)
+                for ip in actives:
+                    try:
+                        host, _, _ = audit.recuperer_infos_os_auto(ip, user, pwd)
+                        print(f"• {ip} : {Fore.YELLOW}{host if host else 'Accès bloqué'}")
+                    except: print(f"• {ip} : {Fore.RED}Erreur")
+
+            elif choix == '3':
+                chemin = input("Fichier CSV : ")
+                res = audit.traiter_fichier_csv(chemin)
+                for r in res: print(f"• {r['nom']} : {r['statut']}")
+
+            elif choix == '4':
+                os_nom = input("Entrez l'OS (ex: windows-server, ubuntu) : ").lower()
+                audit.lister_toutes_versions_os(os_nom)
+
+            elif choix == '5': break
+
+        except Exception as e:
+            if "rejected" in str(e).lower() or "authentication" in str(e).lower() or "denied" in str(e).lower():
+                echecs_auth += 1
+                reset_session()
+                print(f"{Fore.RED}❌ Accès refusé ({echecs_auth}/3)")
+            else: print(f"{Fore.RED}⚠️ Erreur : {e}")
+        input(f"\nAppuyez sur Entrée...")
 
 if __name__ == "__main__":
     config_data = load_config()

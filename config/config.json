@@ -4,9 +4,10 @@
     "WMS_DB_USER": "ntl_admin",
     
 
-    "WMS_IP_DC": "10.60.178.48",
+    "WMS_IP_DC": "10.60.176.90",
     "WIN_USER": "Administrateur",
 
     "WMS_METIER_IP": "10.60.186.58",
     "SSH_USER": "ubuntu"
 }
+

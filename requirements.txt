@@ -1,15 +1,17 @@
-# --- Bibliothèques principales ---
-mysql-connector-python==9.5.0
-paramiko==4.0.0
-pywinrm
-psutil==7.1.3
-ldap3==2.9.1
+# --- Base et Réseau ---
 requests==2.32.5
+paramiko==4.0.0
+cryptography>=42.0.0
 python-dotenv==1.2.1
 
-# --- Module Audit ---
+# --- Bases de données et LDAP ---
+mysql-connector-python==9.5.0
+ldap3==2.9.1
+
+# --- Module Audit et Windows (Crucial) ---
 wmi==1.5.1
-pywin32
+pywin32==306
+psutil==7.1.3
 
 # --- Interface et utilitaires ---
 colorama==0.4.6
