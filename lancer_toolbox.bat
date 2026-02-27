@@ -8,13 +8,18 @@ echo ==================================================
 echo.
 
 :: 1. VERIFICATION / CREATION DU VENV
+:: On utilise "py" qui est le lanceur standard Windows pour eviter les conflits
 if not exist ".\venv" (
     echo [STEP 1/3] Creation de l'environnement virtuel...
-    python -m venv venv
-    echo [##########                    ] 33%% - VENV CREE
+    py -m venv venv
+    if errorlevel 1 (
+        echo [ERREUR] "py" non trouve, essai avec "python"...
+        python -m venv venv
+    )
+    echo [##########          ] 33%% - VENV CREE
 ) else (
     echo [STEP 1/3] Environnement virtuel deja present.
-    echo [##########                    ] 33%% - SKIP
+    echo [##########          ] 33%% - SKIP
 )
 
 :: 2. MISE A JOUR DES DEPENDANCES
