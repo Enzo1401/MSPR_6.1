@@ -6,7 +6,7 @@ python-dotenv
 pywinrm
 
 # --- Bases de donnees et LDAP ---
-mysql-connector-python
+mysql-connector-python==8.0.33
 ldap3
 
 # --- Module Audit et Windows ---
