@@ -1,13 +1,13 @@
 {
-    "WMS_DB_IP": "192.168.0.20",
+    "WMS_DB_IP": "X.X.X.X",
     "WMS_DB_NAME": "wms_db",
     "WMS_DB_USER": "ntl_admin",
     
 
-    "WMS_IP_DC": "192.168.0.38",
+    "WMS_IP_DC": "X.X.X.X",
     "WIN_USER": "Administrateur",
 
-    "WMS_METIER_IP": "192.168.0.20",
+    "WMS_METIER_IP": "X.X.X.X",
     "SSH_USER": "debian"
 }
 

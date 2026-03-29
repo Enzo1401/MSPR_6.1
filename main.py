@@ -130,27 +130,65 @@ def gerer_audit_obsolescence(config):
                 if audit.scanner_ip(ip):
                     host, prod, ver = audit.recuperer_infos_os_auto(ip, user, pwd)
                     if host:
-                        print(f"🖥️  Serveur : {host}")
-                        print(audit.formater_resultat_eol(prod, ver, audit.verifier_eol_api(prod, ver)))
+                        eol = audit.verifier_eol_api(prod, ver)
+                        msg = audit.formater_resultat_eol(prod, ver, eol)
+                        print(f"🖥️  Serveur : {host}\n{msg}")
+                        
+                        # Génération du rapport structuré JSON (Exigence CDC)
+                        from modules.utils import create_output, print_result
+                        output = create_output("AUDIT CIBLE", ip, 0, msg, {"host": host, "eol": eol})
+                        print_result(output) 
+                        
                         echecs_auth = 0
-                    else: raise Exception("auth_failed")
-                else: print(f"{Fore.RED}❌ Injoignable.")
+                    else: 
+                        raise Exception("auth_failed")
+                else: 
+                    print(f"{Fore.RED}❌ Injoignable.")
+
             elif choix == '2':
-                base = input("Base IP (ex: 10.60.178) : ")
-                debut, fin = int(input("Début : ")), int(input("Fin : "))
-                audit.scanner_plage_reseau(base, debut, fin)
+                base = input("Base IP (ex: 192.168.10) : ")
+                debut = int(input("Début : "))
+                fin = int(input("Fin : "))
+                
+                # Étape 1 : Scan de présence (Ping)
+                actives = audit.scanner_plage_reseau(base, debut, fin)
+                
+                # Étape 2 : Identification OS (WMI) - Objectif 3 du CDC
+                pwd = get_session_password("pwd_win", "Inventaire OS (WMI)")
+                user = config.get("WIN_USER")
+                
+                print(f"\n{Fore.CYAN}--- RÉSULTATS INVENTAIRE (OS) ---")
+                for ip in actives:
+                    try:
+                        host, prod, ver = audit.recuperer_infos_os_auto(ip, user, pwd)
+                        status = f"{Fore.GREEN}{host} ({prod} {ver})" if host else f"{Fore.YELLOW}Accès WMI refusé"
+                        print(f" • {ip} : {status}")
+                    except Exception:
+                        print(f" • {ip} : {Fore.RED}Erreur connexion")
+                echecs_auth = 0
+
             elif choix == '3':
                 res = audit.traiter_fichier_csv(input("Fichier CSV : "))
-                for r in res: print(f"• {r['nom']} : {r['statut']}")
+                for r in res: 
+                    print(f"• {r['nom']} : {r['statut']}")
+
             elif choix == '4':
                 audit.lister_toutes_versions_os(input("Produit (ex: windows-server) : ").lower())
-            elif choix == '5': break
+
+            elif choix == '5': 
+                break
+                
             echecs_auth = 0
+
         except Exception as e:
             if "auth_failed" in str(e) or "rejected" in str(e).lower():
-                echecs_auth += 1; reset_session()
-                print(f"\n{Fore.RED}❌ ACCÈS REFUSÉ ({echecs_auth}/3)"); input("Entrée...")
-            else: print(f"\n{Fore.RED}⚠️ ERREUR : {e}"); input("Entrée...")
+                echecs_auth += 1
+                reset_session()
+                print(f"\n{Fore.RED}❌ ACCÈS REFUSÉ ({echecs_auth}/3)")
+                input("Appuyez sur Entrée pour continuer...")
+            else: 
+                print(f"\n{Fore.RED}⚠️ ERREUR : {e}")
+                input("Appuyez sur Entrée pour continuer...")
 
 if __name__ == "__main__":
     conf_data = load_config()
