@@ -1,14 +1,23 @@
-import winrm
+import platform
 import paramiko
 import mysql.connector
 import warnings
 from colorama import Fore, Style
 
+# Import conditionnel Windows uniquement
+if platform.system() == "Windows":
+    import winrm
+
 # Désactive les avertissements HTTPS non certifiés pour WinRM
 warnings.filterwarnings("ignore", category=UserWarning)
 
+
 def check_ad_dns(config, password):
     """Vérifie les services AD et DNS sur le contrôleur de domaine."""
+    if platform.system() != "Windows":
+        print(f"{Fore.YELLOW}⚠️  Cette fonction nécessite Windows (WinRM). Non disponible sous Linux.")
+        return
+
     target = config['WMS_IP_DC']
     print(f"\n{Fore.CYAN}[*] Diagnostic AD/DNS : {target}{Style.RESET_ALL}")
     try:
@@ -48,6 +57,10 @@ def check_mysql(config, password):
 
 def verif_systeme_windows(config, password):
     """Récupère la version OS, l'uptime, le CPU, la RAM et les disques du serveur Windows."""
+    if platform.system() != "Windows":
+        print(f"{Fore.YELLOW}⚠️  Cette fonction nécessite Windows (WinRM). Non disponible sous Linux.")
+        return
+
     target = config['WMS_IP_DC']
     print(f"\n{Fore.CYAN}[*] Ressources Windows : {target}{Style.RESET_ALL}")
     try:
@@ -75,7 +88,6 @@ Get-CimInstance Win32_LogicalDisk -Filter "DriveType=3" | ForEach-Object {
 
         if run.status_code == 0:
             lines = run.std_out.decode('utf-8', errors='replace').strip().split('\r\n')
-            # Les 4 premières lignes sont fixes, le reste sont les disques
             os_ver  = lines[0] if len(lines) > 0 else "Inconnu"
             uptime  = lines[1] if len(lines) > 1 else "Inconnu"
             ram     = lines[2] if len(lines) > 2 else "Inconnu"
@@ -111,7 +123,6 @@ def verif_systeme_ubuntu_direct(ip_cible, user_ssh, password):
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(ip_cible, username=user_ssh, password=password, timeout=5)
 
-        # Une commande par info, séparées par |||
         cmd = (
             "cat /etc/os-release | grep PRETTY_NAME | cut -d'\"' -f2"
             " && echo '|||'"
@@ -129,7 +140,6 @@ def verif_systeme_ubuntu_direct(ip_cible, user_ssh, password):
         err    = stderr.read().decode().strip()
         ssh.close()
 
-        # Découpage sur le séparateur |||
         parts   = [p.strip() for p in output.split('|||')]
         os_ver  = parts[0] if len(parts) > 0 else "Inconnu"
         uptime  = parts[1] if len(parts) > 1 else "Inconnu"

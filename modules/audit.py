@@ -1,10 +1,15 @@
+import platform
 import requests
 import subprocess
-import wmi
 import csv
 import os
 from datetime import datetime
 from colorama import Fore, Style
+
+# Import conditionnel Windows uniquement
+if platform.system() == "Windows":
+    import wmi
+
 
 def scanner_ip(ip):
     """Vérifie si la cible répond au ping."""
@@ -14,6 +19,7 @@ def scanner_ip(ip):
         return res.returncode == 0
     except Exception:
         return False
+
 
 def scanner_plage_reseau(base_ip, debut, fin):
     """Scan de détection d'actifs sur une plage donnée."""
@@ -27,35 +33,37 @@ def scanner_plage_reseau(base_ip, debut, fin):
     print(f"\n{Fore.CYAN}Fin du scan. {len(detectees)} machine(s) trouvée(s).")
     return detectees
 
+
 def recuperer_infos_os_auto(ip, username, password):
-    """Récupère les détails de l'OS via WMI."""
+    """Récupère les détails de l'OS via WMI (Windows uniquement)."""
+    if platform.system() != "Windows":
+        print(f"{Fore.YELLOW}⚠️  Cette fonction nécessite Windows (WMI). Non disponible sous Linux.")
+        return None, None, None
+
     try:
         c = wmi.WMI(ip, user=username, password=password)
         for os_info in c.Win32_OperatingSystem():
-            nom_serveur = os_info.CSName 
+            nom_serveur = os_info.CSName
             nom_complet = os_info.Caption.lower()
-            
             if "server" in nom_complet:
                 produit = "windows-server"
                 version = next((x for x in nom_complet.split() if x.isdigit()), "2019")
             else:
                 produit = "windows"
                 version = "10"
-                
             return nom_serveur, produit, version
     except Exception as e:
-        # Signal pour le compteur d'échecs du main.py
         if "0x80070005" in str(e) or "rejected" in str(e).lower():
             raise Exception("auth_failed")
         return None, None, None
 
+
 def verifier_eol_api(produit, version):
     """Consulte l'API endoflife.date."""
-    # Normalisation pour l'API
     if produit == "windows":
         if version == "10": version = "22h2"
         elif version == "11": version = "23h2"
-    
+
     url = f"https://endoflife.date/api/{produit}.json"
     try:
         response = requests.get(url, timeout=5)
@@ -67,6 +75,7 @@ def verifier_eol_api(produit, version):
         return None
     except Exception:
         return "Erreur_API"
+
 
 def lister_toutes_versions_os(produit):
     """Affiche tous les cycles de vie pour un produit donné (Option 4 du menu)."""
@@ -85,6 +94,7 @@ def lister_toutes_versions_os(produit):
     except Exception:
         print(f"{Fore.RED}Erreur de connexion à l'API.")
 
+
 def formater_resultat_eol(produit, version, eol_date):
     """Retourne le diagnostic coloré."""
     if not eol_date or eol_date == "None":
@@ -99,6 +109,7 @@ def formater_resultat_eol(produit, version, eol_date):
         return f"{Fore.RED}[CRITIQUE] {produit} {version} obsolète depuis le {eol_date}"
     return f"{Fore.GREEN}[CONFORME] {produit} {version} supporté jusqu'au {eol_date}"
 
+
 def traiter_fichier_csv(chemin_csv):
     """Audit à partir d'une liste CSV (Option 3 du menu)."""
     resultats = []
@@ -106,14 +117,14 @@ def traiter_fichier_csv(chemin_csv):
         if not os.path.exists(chemin_csv):
             print(f"{Fore.RED}Fichier introuvable : {chemin_csv}")
             return []
-            
+
         with open(chemin_csv, mode='r', encoding='utf-8') as f:
             lecteur = csv.DictReader(f)
             for ligne in lecteur:
-                nom = ligne.get('nom', 'Inconnu')
+                nom  = ligne.get('nom', 'Inconnu')
                 prod = ligne.get('produit', 'windows')
-                ver = ligne.get('version', '10')
-                eol = verifier_eol_api(prod, ver)
+                ver  = ligne.get('version', '10')
+                eol  = verifier_eol_api(prod, ver)
                 statut = formater_resultat_eol(prod, ver, eol)
                 resultats.append({"nom": nom, "statut": statut})
         return resultats

@@ -9,9 +9,9 @@ pywinrm
 mysql-connector-python==8.0.33
 ldap3
 
-# --- Module Audit et Windows ---
-wmi
-pywin32
+# --- Module Audit et Windows (ignorés automatiquement sous Linux) ---
+wmi; sys_platform == "win32"
+pywin32; sys_platform == "win32"
 psutil
 
 # --- Interface et utilitaires ---
