@@ -11,18 +11,30 @@ SEUIL_EOL_JOURS = 180
 # ─── Réseau 
 
 def scanner_ip(ip):
+    """Vérifie si la cible répond au ping en validant la présence du TTL."""
     try:
         param = '-n' if os.name == 'nt' else '-c'
-        return subprocess.run(['ping', param, '1', ip], capture_output=True, timeout=2).returncode == 0
-    except:
+        # On capture la sortie texte (stdout) pour l'analyser
+        res = subprocess.run(['ping', param, '1', ip], capture_output=True, text=True, timeout=2)
+        
+        # Un ping est réussi SEULEMENT si returncode est 0 ET que "TTL=" est dans le texte
+        return res.returncode == 0 and "TTL=" in res.stdout.upper()
+    except Exception:
         return False
 
 def scanner_plage_reseau(base_ip, debut, fin):
-    print(f"\n{Fore.BLUE}⏳ Scan {base_ip}.{debut} → {base_ip}.{fin}...{Style.RESET_ALL}")
-    detectees = [f"{base_ip}.{i}" for i in range(debut, fin+1) if scanner_ip(f"{base_ip}.{i}")]
-    for ip in detectees:
-        print(f"{Fore.GREEN}[+] {ip}")
-    print(f"\n{Fore.CYAN}{len(detectees)} machine(s) trouvée(s).")
+    """Scan de détection avec filtrage strict."""
+    print(f"\n{Fore.BLUE}⏳ Scan de la plage {base_ip}.{debut} à {base_ip}.{fin}...{Style.RESET_ALL}")
+    detectees = []
+    
+    for i in range(debut, fin + 1):
+        ip_test = f"{base_ip}.{i}"
+        if scanner_ip(ip_test):
+            # On n'affiche que si la machine répond vraiment au ping
+            print(f"{Fore.GREEN}[+] Machine active : {ip_test}")
+            detectees.append(ip_test)
+            
+    print(f"\n{Fore.CYAN}Fin du scan. {len(detectees)} machine(s) trouvée(s).")
     return detectees
 
 
